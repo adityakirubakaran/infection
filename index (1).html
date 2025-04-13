@@ -8,6 +8,179 @@
     <!-- Make sure Tone.js loads before the game script -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
    <style>
+    
+    
+    #rules-button {
+        position: fixed;
+        right: 1.5rem;
+        top: 1.5rem;
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+        background-color: #4ade80;
+        color: #111827;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 1.5rem;
+        cursor: pointer;
+        border: 2px solid #6ee7b7;
+        box-shadow: 0 0 10px rgba(110, 231, 183, 0.5);
+        z-index: 20;
+        transition: all 0.3s ease;
+    }
+    
+    #rules-button:hover {
+        background-color: #6ee7b7;
+        transform: scale(1.1);
+    }
+    
+    #rules-popup {
+        position: fixed;
+        right: 1.5rem;
+        top: 5rem;
+        width: 0;
+        height: 80vh;
+        background-color: #1f2937;
+        border: 2px solid #6ee7b7;
+        border-radius: 0.5rem;
+        padding: 0;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        z-index: 15;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        visibility: hidden;
+    }
+    
+    #rules-popup.active {
+        width: 500px;
+        max-width: 90vw;
+        padding: 1.5rem;
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    #rules-content {
+        overflow-y: auto;
+        height: 100%;
+        padding-right: 0.5rem;
+    }
+    
+    #rules-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 0.375rem;
+        margin: 1rem 0;
+    }
+    
+    .rules-title {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        position: relative;
+    }
+    
+    .rules-title h2 {
+        font-size: 1.25rem;
+        color: #6ee7b7;
+        margin: 0;
+        text-align: center;
+        flex: 1;
+    }
+    
+    .rules-close {
+        position: absolute;
+        right: 0;
+        top: 0;
+        background: none;
+        border: none;
+        color: #9ca3af;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0;
+        line-height: 1;
+    }
+    
+    .rules-close:hover {
+        color: #f9fafb;
+    }
+    
+    .rules-section {
+        margin-bottom: 1.5rem;
+    }
+    
+    .rules-step {
+        display: flex;
+        margin-bottom: 1.5rem;
+        align-items: flex-start;
+    }
+    
+    .rules-step-number {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        background-color: #4ade80;
+        color: #111827;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Press Start 2P', monospace;
+        margin-right: 1rem;
+        flex-shrink: 0;
+    }
+    
+    .rules-step-content {
+        flex: 1;
+    }
+    
+    .rules-list {
+        list-style-type: none;
+        padding-left: 0.5rem;
+        margin: 0.75rem 0;
+    }
+    
+    .rules-list li {
+        display: flex;
+        margin-bottom: 0.5rem;
+        font-size: 0.8rem;
+        line-height: 1.4;
+    }
+    
+    .rules-list li::before {
+        content: '•';
+        color: #4ade80;
+        font-weight: bold;
+        margin-right: 0.5rem;
+    }
+    
+    .rules-footer {
+        text-align: center;
+        font-size: 0.9rem;
+        margin-top: 2rem;
+        color: #9ca3af;
+    }
+    
+    /* Virus images for decoration */
+    .virus-decoration {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        pointer-events: none;
+        opacity: 0.6;
+    }
+    
+    .virus-1 {
+        top: 10px;
+        left: 10px;
+    }
+    
+    .virus-2 {
+        bottom: 10px;
+        right: 10px;
+    }
+
     /* Complete updated CSS for Viral Infection Game */
     body {
         display: flex;
@@ -701,6 +874,65 @@
         </div>
     </div>
     
+    <button id="rules-button" aria-label="Game Rules">?</button>
+
+    <div id="rules-popup">
+        <div id="rules-content">
+            <div class="rules-title">
+                <h2>INFECTION GAMEPLAY RULES</h2>
+                <button class="rules-close" aria-label="Close rules">&times;</button>
+            </div>
+            
+            <div class="rules-section">
+                <div class="rules-step">
+                    <div class="rules-step-number">1</div>
+                    <div class="rules-step-content">
+                        <p>Both players enter their names. They can choose between two styles of gameplay:</p>
+                        <ul class="rules-list">
+                            <li>Automatic - A die is provided on the screen to roll.</li>
+                            <li>Manual - The player rolls their own physical die, and enters the number on the screen.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="rules-step">
+                    <div class="rules-step-number">2</div>
+                    <div class="rules-step-content">
+                        <p>An infectious blob is automatically placed in the center of the 9x9 grid, at (5,5). Each player has two "headquarters" located on opposite corners of the board.</p>
+                    </div>
+                </div>
+                
+                <div class="rules-step">
+                    <div class="rules-step-number">3</div>
+                    <div class="rules-step-content">
+                        <p>Each player takes turns rolling the die. If it's a:</p>
+                        <ul class="rules-list">
+                            <li>1: Blob Moves Up</li>
+                            <li>2: Blob Moves Right</li>
+                            <li>3: Blob Moves Down</li>
+                            <li>4: Blob Moves Left</li>
+                            <li>5: None</li>
+                            <li>6: All adjacent cells to the infected blob are infected.</li>
+                        </ul>
+                        <p>In the manual version, once the user rolls the physical die, they should enter the number rolled into the following box.</p>
+                    </div>
+                </div>
+                
+                <div class="rules-step">
+                    <div class="rules-step-number">4</div>
+                    <div class="rules-step-content">
+                        <p>The player that has none of their headquarters infected by the infectious blob wins. If both players have headquarters that are infected at the same time, it is a tie.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="rules-footer">
+                <p>WHO WILL BE THE LAST ONE STANDING?</p>
+            </div>
+        </div>
+    </div>
+    
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize sound effects with error handling
@@ -774,6 +1006,9 @@
             };
             
             // Game elements
+            const rulesButton = document.getElementById('rules-button');
+            const rulesPopup = document.getElementById('rules-popup');
+            const rulesClose = document.querySelector('.rules-close');
             const setupScreen = document.getElementById('setup-screen');
             const gameScreen = document.getElementById('game-screen');
             const gameOverScreen = document.getElementById('game-over-screen');
@@ -792,8 +1027,8 @@
             const diceContainer = document.getElementById('dice-container');
             const modeToggleBtn = document.getElementById('mode-toggle');
             const endGameBtn = document.getElementById('end-game');
-    const fastForwardBtn = document.getElementById('fast-forward');
-
+            const fastForwardBtn = document.getElementById('fast-forward');
+    
             // Manual dice elements
             const manualDiceContainer = document.getElementById('manual-dice-container');
             const manualDiceInput = document.getElementById('manual-dice-input');
@@ -816,60 +1051,76 @@
             let player2Alive = true;
             let gameActive = false;
             let fastForwardActive = false;
-    let fastForwardInterval = null;
-
-
-        // Fast forward functionality
-        function toggleFastForward() {
-        fastForwardActive = !fastForwardActive;
-        
-        if (fastForwardActive) {
-            fastForwardBtn.textContent = 'STOP';
-            fastForwardBtn.classList.add('active');
+            let fastForwardInterval = null;
+    
+            // Toggle rules popup visibility
+            rulesButton.addEventListener('click', function() {
+                rulesPopup.classList.toggle('active');
+            });
             
-            // Start automatic rolling at fast pace
-            fastForwardInterval = setInterval(() => {
-                if (gameActive && gameMode === 'automatic') {
-                    autoRoll();
+            // Close rules popup
+            rulesClose.addEventListener('click', function() {
+                rulesPopup.classList.remove('active');
+            });
+            
+            // Close rules popup when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!rulesPopup.contains(event.target) && event.target !== rulesButton) {
+                    rulesPopup.classList.remove('active');
+                }
+            });
+    
+            // Fast forward functionality
+            function toggleFastForward() {
+                fastForwardActive = !fastForwardActive;
+                
+                if (fastForwardActive) {
+                    fastForwardBtn.textContent = 'STOP';
+                    fastForwardBtn.classList.add('active');
+                    
+                    // Start automatic rolling at fast pace
+                    fastForwardInterval = setInterval(() => {
+                        if (gameActive && gameMode === 'automatic') {
+                            autoRoll();
+                        } else {
+                            // Stop if game is over or mode changed
+                            toggleFastForward();
+                        }
+                    }, 300); // Roll every 300ms
                 } else {
-                    // Stop if game is over or mode changed
+                    fastForwardBtn.textContent = 'FAST FORWARD';
+                    fastForwardBtn.classList.remove('active');
+                    
+                    // Clear the interval
+                    if (fastForwardInterval) {
+                        clearInterval(fastForwardInterval);
+                        fastForwardInterval = null;
+                    }
+                }
+            }
+            
+            // Simplified auto roll function for fast forward
+            function autoRoll() {
+                if (!gameActive) return;
+                
+                const roll = Math.floor(Math.random() * 6) + 1;
+                diceBox.textContent = roll;
+                
+                // Skip animation for fast forward
+                handleDiceRoll(roll);
+            }
+            
+            // End game function
+            function endGame() {
+                // Stop fast forward if active
+                if (fastForwardActive) {
                     toggleFastForward();
                 }
-            }, 300); // Roll every 300ms
-        } else {
-            fastForwardBtn.textContent = 'FAST FORWARD';
-            fastForwardBtn.classList.remove('active');
-            
-            // Clear the interval
-            if (fastForwardInterval) {
-                clearInterval(fastForwardInterval);
-                fastForwardInterval = null;
+                
+                // Reset game
+                resetGame();
             }
-        }
-    }
     
-    // Simplified auto roll function for fast forward
-    function autoRoll() {
-        if (!gameActive) return;
-        
-        const roll = Math.floor(Math.random() * 6) + 1;
-        diceBox.textContent = roll;
-        
-        // Skip animation for fast forward
-        handleDiceRoll(roll);
-    }
-    
-    // End game function
-    function endGame() {
-        // Stop fast forward if active
-        if (fastForwardActive) {
-            toggleFastForward();
-        }
-        
-        // Reset game
-        resetGame();
-    }
-
             // Game mode selection
             gameModeOptions.forEach(option => {
                 option.addEventListener('click', function() {
@@ -888,30 +1139,31 @@
                 }
                 this.value = value;
             });
+            
             function toggleGameMode() {
-        // Stop fast forward if active
-        if (fastForwardActive) {
-            toggleFastForward();
-        }
-        
-        if (gameMode === 'automatic') {
-            gameMode = 'manual';
-            modeToggleBtn.textContent = 'SWITCH TO AUTOMATIC';
-            diceContainer.style.display = 'none';
-            manualDiceContainer.style.display = 'flex';
-            fastForwardBtn.style.display = 'none'; // Hide fast forward in manual mode
-            addToLog('Switched to manual dice mode.');
-        } else {
-            gameMode = 'automatic';
-            modeToggleBtn.textContent = 'SWITCH TO MANUAL';
-            diceContainer.style.display = 'flex';
-            manualDiceContainer.style.display = 'none';
-            rollDiceBtn.disabled = false;
-            fastForwardBtn.style.display = 'block'; // Show fast forward in automatic mode
-            addToLog('Switched to automatic dice mode.');
-        }
-    }
-
+                // Stop fast forward if active
+                if (fastForwardActive) {
+                    toggleFastForward();
+                }
+                
+                if (gameMode === 'automatic') {
+                    gameMode = 'manual';
+                    modeToggleBtn.textContent = 'SWITCH TO AUTOMATIC';
+                    diceContainer.style.display = 'none';
+                    manualDiceContainer.style.display = 'flex';
+                    fastForwardBtn.style.display = 'none'; // Hide fast forward in manual mode
+                    addToLog('Switched to manual dice mode.');
+                } else {
+                    gameMode = 'automatic';
+                    modeToggleBtn.textContent = 'SWITCH TO MANUAL';
+                    diceContainer.style.display = 'flex';
+                    manualDiceContainer.style.display = 'none';
+                    rollDiceBtn.disabled = false;
+                    fastForwardBtn.style.display = 'block'; // Show fast forward in automatic mode
+                    addToLog('Switched to automatic dice mode.');
+                }
+            }
+    
             // Initialize the grid
             function initializeGrid() {
                 grid = Array(GRID_SIZE).fill().map(() => Array(GRID_SIZE).fill('-'));
@@ -1227,77 +1479,77 @@
             
             // Start the game
             function startGame() {
-        player1Name = player1Input.value.trim() || 'Survivor 1';
-        player2Name = player2Input.value.trim() || 'Survivor 2';
-        
-        setupScreen.classList.add('hidden');
-        gameScreen.classList.remove('hidden');
-        gameOverScreen.classList.add('hidden');
-        
-        gameActive = true;
-        player1Alive = true;
-        player2Alive = true;
-        currentPlayer = 1;
-        
-        initializeGrid();
-        gameLog.innerHTML = '';
-        diceBox.textContent = '?';
-        newGameBtn.classList.add('hidden');
-        
-        // Show appropriate dice interface based on game mode
-        if (gameMode === 'automatic') {
-            diceContainer.style.display = 'flex';
-            manualDiceContainer.style.display = 'none';
-            rollDiceBtn.disabled = false;
-            fastForwardBtn.style.display = 'block'; // Show fast forward in automatic mode
-        } else {
-            diceContainer.style.display = 'none';
-            manualDiceContainer.style.display = 'flex';
-            fastForwardBtn.style.display = 'none'; // Hide fast forward in manual mode
-        }
-        
-        // Set the toggle button text based on initial mode
-        if (gameMode === 'automatic') {
-            modeToggleBtn.textContent = 'SWITCH TO MANUAL';
-        } else {
-            modeToggleBtn.textContent = 'SWITCH TO AUTOMATIC';
-        }
-        
-        addToLog(`Game started! ${player1Name} (Red) vs ${player2Name} (Blue)`);
-        updateTurnIndicator();
-    }
+                player1Name = player1Input.value.trim() || 'Survivor 1';
+                player2Name = player2Input.value.trim() || 'Survivor 2';
+                
+                setupScreen.classList.add('hidden');
+                gameScreen.classList.remove('hidden');
+                gameOverScreen.classList.add('hidden');
+                
+                gameActive = true;
+                player1Alive = true;
+                player2Alive = true;
+                currentPlayer = 1;
+                
+                initializeGrid();
+                gameLog.innerHTML = '';
+                diceBox.textContent = '?';
+                newGameBtn.classList.add('hidden');
+                
+                // Show appropriate dice interface based on game mode
+                if (gameMode === 'automatic') {
+                    diceContainer.style.display = 'flex';
+                    manualDiceContainer.style.display = 'none';
+                    rollDiceBtn.disabled = false;
+                    fastForwardBtn.style.display = 'block'; // Show fast forward in automatic mode
+                } else {
+                    diceContainer.style.display = 'none';
+                    manualDiceContainer.style.display = 'flex';
+                    fastForwardBtn.style.display = 'none'; // Hide fast forward in manual mode
+                }
+                
+                // Set the toggle button text based on initial mode
+                if (gameMode === 'automatic') {
+                    modeToggleBtn.textContent = 'SWITCH TO MANUAL';
+                } else {
+                    modeToggleBtn.textContent = 'SWITCH TO AUTOMATIC';
+                }
+                
+                addToLog(`Game started! ${player1Name} (Red) vs ${player2Name} (Blue)`);
+                updateTurnIndicator();
+            }
             
             // Reset game
             function resetGame() {
-    // Stop fast forward if active
-    if (fastForwardActive) {
-        toggleFastForward();
-    }
-    
-    // Remember the current game mode before resetting
-    const currentMode = gameMode;
-    
-    // Reset UI
-    gameScreen.classList.add('hidden');
-    gameOverScreen.classList.add('hidden');
-    setupScreen.classList.remove('hidden');
-    
-    // Update game mode selection UI to match current mode
-    gameModeOptions.forEach(option => {
-        if (option.getAttribute('data-mode') === currentMode) {
-            option.classList.add('selected');
-        } else {
-            option.classList.remove('selected');
-        }
-    });
-}            
+                // Stop fast forward if active
+                if (fastForwardActive) {
+                    toggleFastForward();
+                }
+                
+                // Remember the current game mode before resetting
+                const currentMode = gameMode;
+                
+                // Reset UI
+                gameScreen.classList.add('hidden');
+                gameOverScreen.classList.add('hidden');
+                setupScreen.classList.remove('hidden');
+                
+                // Update game mode selection UI to match current mode
+                gameModeOptions.forEach(option => {
+                    if (option.getAttribute('data-mode') === currentMode) {
+                        option.classList.add('selected');
+                    } else {
+                        option.classList.remove('selected');
+                    }
+                });
+            }
+            
             // Event listeners
             startGameBtn.addEventListener('click', startGame);
             rollDiceBtn.addEventListener('click', rollDice);
             modeToggleBtn.addEventListener('click', toggleGameMode);
             endGameBtn.addEventListener('click', endGame);
-    fastForwardBtn.addEventListener('click', toggleFastForward);
-
+            fastForwardBtn.addEventListener('click', toggleFastForward);
             submitDiceBtn.addEventListener('click', function() {
                 if (!gameActive) return;
                 
@@ -1320,5 +1572,8 @@
             restartGameBtn.addEventListener('click', resetGame);
         });
     </script>
+
+
+
     </body>
 </html>
